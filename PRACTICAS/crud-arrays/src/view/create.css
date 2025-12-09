@@ -1,0 +1,165 @@
+/* create-style.css
+   Estilos completos para view/create.php
+   - Título alineado a la izquierda y con espacio
+   - Formulario con campos de ancho completo
+   - Diseño responsive
+*/
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== FONDO Y LAYOUT ===== */
+body {
+    font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #74b9ff 0%, #a29bfe 100%);
+    color: #2d3436;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px; /* evita que el contenedor toque el borde en pantallas pequeñas */
+}
+
+/* ===== CONTENEDOR ===== */
+.form-wrapper {
+    background: #ffffff;
+    width: 420px;
+    max-width: 100%;
+    padding: 28px 32px;   /* suficiente espacio interior para que el título no choque */
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.7s ease-in-out;
+    /* importante: alineamos TODO hacia la izquierda dentro del contenedor */
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ===== ANIMACIÓN ===== */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== TÍTULO ===== */
+.form-wrapper h1 {
+    font-size: 1.6rem;
+    color: #2c3e50;
+    margin-bottom: 14px;
+    /* alineación e indentado para que no choque con el borde */
+    text-align: left;
+    margin-left: 4px;
+}
+
+/* ===== SUBTÍTULO / MENSAJES (si usas mensajes de sesión) ===== */
+.msg {
+    background-color: #eaf6ff;
+    border: 1px solid #b3d7ff;
+    color: #0066cc;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    max-width: 100%;
+}
+
+/* ===== FORMULARIO ===== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* etiqueta */
+label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    margin-left: 4px; /* pequeño offset para igualar el título */
+}
+
+/* campos de entrada */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d8e0;
+    font-size: 1rem;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* foco accesible */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #0984e3;
+    box-shadow: 0 0 6px rgba(9, 132, 227, 0.18);
+}
+
+/* para el campo number pequeño (ID), mantenemos mismo estilo pero permitimos width reducido si quieres */
+.input-inline {
+    max-width: 160px;
+}
+
+/* BOTÓN */
+button[type="submit"] {
+    background: linear-gradient(180deg, #0984e3, #066bb3);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    margin-top: 6px;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(9, 132, 227, 0.18);
+}
+
+/* ENLACE DE VOLVER */
+.back-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: #0984e3;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* LÍNEA DIVISORIA */
+.form-divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg,#e9eef7,#ffffff 60%);
+    margin: 8px 0 12px;
+    border-radius: 2px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 520px) {
+    .form-wrapper {
+        padding: 22px;
+        width: 100%;
+    }
+
+    .form-wrapper h1 {
+        font-size: 1.4rem;
+        margin-left: 2px;
+    }
+}

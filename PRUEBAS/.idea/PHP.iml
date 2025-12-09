@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/PRACTICAS/crud-objeto-Pita/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PRACTICAS/crud-objetos/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PruebasHerencia/pruebas2/src" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

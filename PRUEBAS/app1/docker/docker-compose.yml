@@ -1,0 +1,12 @@
+#Services
+services:
+  #Apache + PHP
+  appUno:
+    image: php:8.1-apache
+    #Preparamos un volumen para almacenar nuestro codigo
+    volumes:
+      - ../src/:/var/www/html
+    expose:
+      - 80
+    ports:
+      - 8001:80
