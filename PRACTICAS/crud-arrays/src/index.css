@@ -1,0 +1,81 @@
+/* ======== ESTILOS GENERALES ======== */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    color: #2c3e50;
+}
+
+hr {
+    width: 80%;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+}
+
+h3 {
+    text-align: center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 40px auto;
+}
+
+li {
+    margin: 15px 0;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    padding: 12px 0;
+    background: #3498db;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    background: #2980b9;
+    transform: scale(1.03);
+}
+
+/* Mensaje de sesión */
+h3.msg {
+    background-color: #eaf6ff;
+    border: 1px solid #b3d7ff;
+    color: #0066cc;
+    padding: 10px;
+    border-radius: 6px;
+    width: 60%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+h3 + hr {
+    width: 50%;
+    border-color: #3498db;
+}
+
+/* Diseño responsive */
+@media (max-width: 600px) {
+    ul {
+        width: 90%;
+    }
+
+    h3.msg {
+        width: 85%;
+    }
+}
