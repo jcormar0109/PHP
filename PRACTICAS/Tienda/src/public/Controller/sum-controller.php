@@ -6,6 +6,8 @@ use App\Model\User;
 use App\Model\Book;
 
 session_start();
+$db= Db::getInstance();
+
     $choice = filter_input(INPUT_GET, 'choice', FILTER_SANITIZE_FULL_SPECIAL_CHARS  );
     $place = filter_input(INPUT_GET, 'place', FILTER_VALIDATE_INT);
     $quantity = filter_input(INPUT_GET, 'quantity', FILTER_VALIDATE_INT);
@@ -18,7 +20,12 @@ session_start();
             $cart->add($book);
         } else {
             if ($choice === "sum") {
-                $cart->sumBookQuant($book);
+                if ($quantity < ($db->getStock($book))) {
+                    $cart->sumBookQuant($book);
+                } else {
+                    $_SESSION['msg'] = "Error: no puedes superar la cantidad de stock disponible" ;
+                    header('location: ../View/cart-view.php');
+                }
             }
             else {
                 if ($quantity > 0) {

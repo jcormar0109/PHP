@@ -4,6 +4,7 @@ use App\Model\Db;
 session_start();
 $db = Db::getInstance();
 $book = $_SESSION['book'];
+$user = $_SESSION['user'] ?? null;
 ?>
 
 <!doctype html>
@@ -11,19 +12,19 @@ $book = $_SESSION['book'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Detalle del Libro</title>
 
     <style>
         body {
-            font-family: "Inter", Arial, sans-serif;
-            background: #f1f3f4;
+            font-family: Arial, sans-serif;
+            background: #eceff1;
             margin: 0;
             padding: 0;
-            color: #263238;
         }
 
-        /* HEADER */
+        /* HEADER MODERNO */
         header {
             background: #263238;
             padding: 15px 50px;
@@ -58,104 +59,132 @@ $book = $_SESSION['book'];
             align-items: center;
         }
 
-        /* CONTENEDOR PRINCIPAL */
+        /* CONTENIDO DETALLE */
         .detail-wrapper {
             max-width: 1100px;
-            margin: 40px auto;
+            margin: 35px auto;
             display: flex;
             gap: 40px;
             padding: 20px;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
         }
 
-        /* PORTADA */
         .book-cover {
             width: 300px;
             height: 420px;
             background: #cfd8dc;
-            border-radius: 14px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 20px;
-            color: #37474f;
-            font-weight: 700;
-            text-transform: uppercase;
         }
 
-        /* INFORMACIÓN */
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
         .detail-card {
             width: 480px;
             background: white;
             border-radius: 14px;
-            padding: 28px;
+            padding: 30px;
             box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-            transition: 0.25s ease;
+            transition: .25s;
         }
 
         .detail-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
 
         .book-title {
-            font-size: 26px;
-            font-weight: 800;
-            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: bold;
             color: #263238;
+            margin-bottom: 10px;
         }
 
         .book-author {
-            font-size: 16px;
+            font-size: 18px;
             color: #546e7a;
-            margin-bottom: 18px;
+            margin-bottom: 20px;
         }
 
         .info-row {
-            margin: 10px 0;
-            font-size: 16px;
-            color: #37474f;
+            margin: 12px 0;
+            font-size: 17px;
         }
 
         .info-row strong {
             color: #263238;
         }
 
-        /* BOTÓN CARRITO */
-        .cart-btn {
-            margin-top: 25px;
-            width: 100%;
-            padding: 13px;
-            font-size: 17px;
-            font-weight: 600;
+        .add-cart-btn {
+            font-family: inherit;
+            font-size: 20px;
             background: #0288d1;
+            color: white;
+            fill: white;
+            padding: 0.9em 1em;
+            width: 100%;
+            cursor: pointer;
             border: none;
             border-radius: 12px;
-            color: white;
-            cursor: pointer;
-            transition: 0.25s ease;
+            font-weight: 900;
+            transition: 0.3s ease;
+            margin-top: 25px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .cart-btn:hover {
-            background: #03a9f4;
-            transform: scale(1.06);
+        .add-cart-btn svg {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            transition: all 0.45s ease-in-out;
+            z-index: 5;
+        }
+
+        .add-cart-btn span {
+            margin-left: 50px;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .add-cart-btn:hover svg {
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.4);
+        }
+
+        .add-cart-btn:hover span {
+            opacity: 0;
+        }
+
+        .add-cart-btn:hover {
+            background: #039be5;
+        }
+
+        .add-cart-btn:active {
+            transform: scale(0.94);
         }
 
         h4.msg {
             text-align: center;
-            color: #00796b;
-            font-size: 18px;
+            color: green;
             margin-top: 15px;
-            font-weight: 600;
         }
 
-        /* RESPONSIVE */
         @media (max-width: 900px) {
             .detail-wrapper {
                 flex-direction: column;
-                align-items: center;
             }
 
             .book-cover {
@@ -164,11 +193,10 @@ $book = $_SESSION['book'];
             }
 
             .detail-card {
-                width: 92%;
+                width: 90%;
             }
         }
     </style>
-
 </head>
 
 <body>
@@ -176,53 +204,71 @@ $book = $_SESSION['book'];
 <header>
     <div class="left-nav">
         <a href="../index.php"><span class="material-symbols-outlined">home</span>Inicio</a>
-        <?php
-
-        if (isset($_SESSION['added'])) {
-                echo "<a href='cart-view.php'><span class='material-symbols-outlined'>add_shopping_cart</span>Carrito</a>";
+        <a href="cart-view.php"><span class="material-symbols-outlined">
+            <?php
+            if (isset($_SESSION['added'])){
+                echo 'add_shopping_cart';
                 unset($_SESSION['added']);
-            }else {
-                echo "<a href='cart-view.php'><span class='material-symbols-outlined'>shopping_cart</span>Carrito</a>";
-            }
+            } else {
+                echo 'shopping_cart';
+            }  ?>
+        </span>Carrito</a>
+    </div>
 
-        echo "</div>
-        <div class='right-nav'>";
-
-            if (!isset($_SESSION['user'])){
-            echo "<a href='../View/login.php'><span class='material-symbols-outlined'>login</span>Login</a>";
+    <div class="right-nav">
+        <?php
+        if (!isset($_SESSION['user'])) {
+            echo "<a href='login.php'><span class='material-symbols-outlined'>login</span>Login</a>";
         } else {
-            echo "<a href='../Controller/logout-controller.php'><span class='material-symbols-outlined'>logout</span>Logout</a>";
+            echo "<a href='../Controller/logout-controller.php'><span class='material-symbols-outlined'>logout</span>".$user->getUsername()."</a>";
+            echo "<a href='orders-view.php'><span class='material-symbols-outlined'>receipt</span>Pedidos</a>";
         }
+        ?>
+    </div>
+</header>
 
-    echo "</div>
-    </header>";
-
-    if (isset($_SESSION['msg'])) {
-        echo "<h4 class='msg'>".$_SESSION['msg']."</h4>";
-        unset($_SESSION['msg']);
-    }
-    ?>
+<?php
+if (isset($_SESSION['msg'])) {
+    echo "<h4 class='msg'>".$_SESSION['msg']."</h4>";
+    unset($_SESSION['msg']);
+}
+?>
 
 <div class="detail-wrapper">
 
     <div class="book-cover">
-        PORTADA
+        <img src="../../img/<?= $book->getIsbn() ?>.jpg" alt="Portada de <?= $book->getTitle() ?>">
     </div>
 
     <div class="detail-card">
-        <div class="book-title"><?= htmlspecialchars($book->getTitle()) ?></div>
-        <div class="book-author">Escrito por <?= htmlspecialchars($book->getAuthor()) ?></div>
 
-        <p class="info-row"><strong>ISBN:</strong> <?= htmlspecialchars($book->getIsbn()) ?></p>
-        <p class="info-row"><strong>Precio sin IVA:</strong> <?= htmlspecialchars($book->getPvp()) ?> €</p>
-        <p class="info-row"><strong>Precio con IVA:</strong> <?= htmlspecialchars($book->getIva()) ?> €</p>
-        <p class="info-row"><strong>Stock disponible:</strong> <?= htmlspecialchars($book->getStock()) ?></p>
+        <div class="book-title"><?= $book->getTitle() ?></div>
+        <div class="book-author">Escrito por <?= $book->getAuthor() ?></div>
+
+        <p class="info-row"><strong>ISBN:</strong> <?= $book->getIsbn() ?></p>
+        <p class="info-row"><strong>Precio sin IVA:</strong> <?= $book->getPvp() ?> €</p>
+        <p class="info-row"><strong>Precio con IVA:</strong> <?= $book->getIva() ?> €</p>
+        <p class="info-row"><strong>Stock disponible:</strong> <?= $book->getStock() ?></p>
+        <p class="info-row"><strong>Descripcion:</strong> <?= $book->getResume() ?></p>
 
         <form method="POST" action="../Controller/cart-controller.php">
-            <button type="submit" name="carrito" class="cart-btn">
-                Añadir al carrito
+            <button type="submit" name="carrito" class="add-cart-btn">
+                <div class="svg-wrapper-1">
+                    <div class="svg-wrapper">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             width="30" height="30" viewBox="0 0 24 24">
+                            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44C7.52 16.37
+                                     8.48 18 10 18h9v-2h-9l1.1-2h7.45c.75 0 1.41-.41
+                                     1.75-1.03l3.58-6.49A1 1 0 0 0 22 4H7zm-2 16a2 2 0
+                                     1 0 0-4 2 2 0 0 0 0 4zm12 0a2 2 0 1 0
+                                     .001-3.999A2 2 0 0 0 17 20z"/>
+                        </svg>
+                    </div>
+                </div>
+                <span>Añadir al carrito</span>
             </button>
         </form>
+
     </div>
 
 </div>

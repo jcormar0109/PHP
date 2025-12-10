@@ -22,7 +22,7 @@ use App\Model\Db;
         } else if (isset($_GET['title'])){
             $title = filter_input(INPUT_GET, 'title', FILTER_SANITIZE_SPECIAL_CHARS);
             $books = $db->getBookByTitle($title);
-            $book = new Book($books[0]['ID'],$books[0]['ISBN'], $books[0]['TITLE'],$books[0]['AUTHOR'],$books[0]['PVP'],$books[0]['STOCK']);
+            $book = new Book($books[0]['ID'],$books[0]['ISBN'], $books[0]['TITLE'],$books[0]['AUTHOR'],$books[0]['PVP'],$books[0]["RESUME"],$books[0]['STOCK']);
             $_SESSION['book'] = $book;
             header("location: ../View/book-info.php");
             exit();

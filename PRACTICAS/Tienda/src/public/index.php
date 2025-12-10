@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once "../vendor/autoload.php";
 
+use App\Model\Book;
 use App\Model\Cart;
 use App\Model\Db;
 session_start();
@@ -132,6 +133,7 @@ if (!isset($_SESSION['cart'])) {
             padding: 16px;
             text-align: center;
             transition: 0.25s ease;
+            position: relative;
         }
 
         .book-card:hover {
@@ -144,13 +146,18 @@ if (!isset($_SESSION['cart'])) {
             height: 240px;
             background: #cfd8dc;
             border-radius: 10px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #37474f;
-            font-weight: bold;
-            font-size: 15px;
             margin-bottom: 12px;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .book-title {
@@ -182,11 +189,20 @@ if (!isset($_SESSION['cart'])) {
             text-decoration: none;
             font-weight: 600;
             transition: 0.25s ease;
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            bottom: 16px;
+            transform: translateX(-50%);
+        }
+
+        .book-card:hover .details-btn {
+            opacity: 1;
         }
 
         .details-btn:hover {
             background: #03a9f4;
-            transform: scale(1.06);
+            transform: translateX(-50%) scale(1.06);
         }
     </style>
 </head>
@@ -205,6 +221,7 @@ if (!isset($_SESSION['cart'])) {
             echo "<a href='View/login.php'><span class='material-symbols-outlined'>login</span>Login</a>";
         } else {
             echo "<a href='Controller/logout-controller.php'><span class='material-symbols-outlined'>logout</span>".$user->getUsername()."</a>";
+            echo "<a href='View/orders-view.php'><span class='material-symbols-outlined'>receipt</span>Pedidos</a>";
         }
         ?>
     </div>
@@ -228,20 +245,25 @@ if (!isset($_SESSION['cart'])) {
 
     <div class="cards-container">
         <?php
-        $books = $db->getAllBooks();
+        $books = $db->getMostSellers();
+        if (!$books) {
+            echo "<h3>Aun no se ha comprado ningun libro</h3>";
+        } else {
+            foreach ($books as $book) {
+                $book = new Book(0, $book['ISBN'], "","",0,"",0);
+                $book = $db->validBook($book);
+                $url = "Controller/search-controller.php?title={$book->getTitle()}&author={$book->getAuthor()}";
 
-        foreach ($books as $book) {
-            $url = "Controller/search-controller.php?title={$book["TITLE"]}&author={$book["AUTHOR"]}";
-
-            echo "
+                echo "
             <div class='book-card'>
-                <div class='book-cover'>PORTADA</div>
-                <div class='book-title'>{$book["TITLE"]}</div>
-                <div class='book-author'>Por {$book["AUTHOR"]}</div>
-                <div class='book-price'>{$book["IVA"]} €</div>
+                <div class='book-cover'><img src='img/{$book->getIsbn()}.jpg' alt='Portada de {$book->getTitle()}'/></div>
+                <div class='book-title'>{$book->getTitle()}</div>
+                <div class='book-author'>Por {$book->getAuthor()}</div>
+                <div class='book-price'>{$book->getIva()} €</div>
                 <a class='details-btn' href='$url'>Ver detalles</a>
             </div>
             ";
+            }
         }
         ?>
     </div>

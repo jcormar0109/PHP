@@ -4,10 +4,10 @@ namespace App\Model;
 
 use Cassandra\Date;
 
-class Invoices
+class Invoice
 {
     private int $id;
-    private Date $date;
+    private string $date;
     private string $n_invoice;
     private int $client_id;
     private string $dni;
@@ -18,7 +18,7 @@ class Invoices
 
     /**
      * @param int $id
-     * @param Date $date
+     * @param string $date
      * @param string $n_invoice
      * @param int $client_id
      * @param string $dni
@@ -27,7 +27,7 @@ class Invoices
      * @param string $address
      * @param int $iva
      */
-    public function __construct(int $id, Date $date, string $n_invoice, int $client_id, string $dni, string $first_name, string $second_name, string $address, int $iva)
+    public function __construct(int $id, string $date, string $n_invoice, int $client_id, string $dni, string $first_name, string $second_name, string $address, int $iva)
     {
         $this->id = $id;
         $this->date = $date;
@@ -50,12 +50,12 @@ class Invoices
         $this->id = $id;
     }
 
-    public function getDate(): Date
+    public function getDate(): string
     {
         return $this->date;
     }
 
-    public function setDate(Date $date): void
+    public function setDate(string $date): void
     {
         $this->date = $date;
     }

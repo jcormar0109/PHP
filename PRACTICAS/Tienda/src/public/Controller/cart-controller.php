@@ -12,21 +12,33 @@ $cart = $_SESSION['cart'] ?? new Cart();
 $book = $_SESSION['book'];
 try{
     if (isset($_POST['carrito'])) {
-        $has = $cart->hasBook($book);
-        if (!$has) {
-            $cart->add($book);
+        $stock = $db->getStock($book);
+
+        if ($book->getQuantity() <= $stock)
+        {
+            $has = $cart->hasBook($book);
+
+            if (!$has) {
+                $cart->add($book);
+            } else {
+                $cart->sumBookQuant($book);
+            }
+            $_SESSION['cart'] = $cart;
+            $_SESSION['msg'] = "Libro añadido al carrito";
+            $_SESSION['added'] = true;
+            header("location: ../View/book-info.php");
+
         } else {
-            $cart->sumBookQuant($book);
+            $_SESSION['msg'] = "ERROR, no hay suficiente stock";
+            header("location: ../View/book-info.php");
+            exit();
         }
-        $_SESSION['cart'] = $cart;
-        $_SESSION['msg'] = "Libro añadido al carrito";
-        $_SESSION['added'] = true;
-        header("location: ../View/book-info.php");
+
     }
 
     if (isset($_GET['isbn']))  {
         $isbn = $_GET['isbn'];
-        $book = new Book(0, $isbn, "example","example",0,0,0);
+        $book = new Book(0, $isbn, "example","example",0,"",0);
         $book = $db->validBook($book);
         if ($cart->remove($book)){
             $_SESSION['msg'] = "Libro elminado del carrito";
