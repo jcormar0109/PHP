@@ -241,14 +241,18 @@ if (!isset($_SESSION['cart'])) {
     }
     ?>
 
-    <h2 style="text-align:center; color:#37474f; font-size:32px; font-weight:800; margin-top:15px;">Libros más vendidos</h2>
 
-    <div class="cards-container">
         <?php
         $books = $db->getMostSellers();
         if (!$books) {
             $books = $db->getAllBooks();
-        } else {
+            echo "<h2 style='text-align:center; color:#37474f; font-size:32px; font-weight:800; margin-top:15px;'>Libros recomendados</h2>";
+
+        } else{
+            echo "<h2 style='text-align:center; color:#37474f; font-size:32px; font-weight:800; margin-top:15px;'>Libros más vendidos</h2>";
+            
+        }
+        echo "<div class='cards-container'>";
             foreach ($books as $book) {
                 $book = new Book(0, $book['ISBN'], "","",0,"",0);
                 $book = $db->validBook($book);
@@ -263,7 +267,7 @@ if (!isset($_SESSION['cart'])) {
                 <a class='details-btn' href='$url'>Ver detalles</a>
             </div>
             ";
-            }
+
         }
         ?>
     </div>
