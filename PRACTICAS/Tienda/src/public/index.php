@@ -247,7 +247,7 @@ if (!isset($_SESSION['cart'])) {
         <?php
         $books = $db->getMostSellers();
         if (!$books) {
-            echo "<h3>Aun no se ha comprado ningun libro</h3>";
+            $books = $db->getAllBooks();
         } else {
             foreach ($books as $book) {
                 $book = new Book(0, $book['ISBN'], "","",0,"",0);
