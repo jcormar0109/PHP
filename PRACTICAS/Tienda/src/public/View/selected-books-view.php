@@ -3,6 +3,7 @@ require_once("../../vendor/autoload.php");
 use App\Model\Db;
 $db = Db::getInstance();
 session_start();
+$user = $_SESSION['user'] ?? null;
 ?>
 
 <!doctype html>
@@ -10,7 +11,8 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Búsqueda / Libros</title>
 
     <style>
@@ -29,11 +31,12 @@ session_start();
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
         }
 
         .left-nav, .right-nav {
             display: flex;
-            gap: 25px;
+            gap: 28px;
             align-items: center;
         }
 
@@ -41,15 +44,18 @@ session_start();
             color: white;
             text-decoration: none;
             font-size: 17px;
-            font-weight: bold;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: 0.2s;
+            transition: 0.25s ease;
+            padding: 6px 10px;
+            border-radius: 6px;
         }
 
         header a:hover {
-            color: #4fc3f7;
+            background: rgba(255,255,255,0.12);
+            transform: translateY(-2px);
         }
 
         /* ===== LISTA DE LIBROS ===== */
@@ -75,23 +81,25 @@ session_start();
             border-bottom: none;
         }
 
-        /* PORTADA */
         .book-cover {
             width: 60px;
             height: 85px;
             background: #cfd8dc;
             border-radius: 6px;
             box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
-            text-align: center;
-            color: #455a64;
-            font-weight: bold;
         }
 
-        /* INFO */
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
         .book-info {
             display: flex;
             flex-direction: column;
@@ -116,7 +124,6 @@ session_start();
             text-align: right;
         }
 
-        /* BOTÓN DETALLES */
         .book-item a.detail-btn {
             text-decoration: none;
             background: #0288d1;
@@ -132,7 +139,6 @@ session_start();
             background: #03a9f4;
         }
 
-        /* TITULO */
         h2 {
             text-align: center;
             margin-top: 20px;
@@ -147,21 +153,23 @@ session_start();
 <header>
     <div class="left-nav">
         <a href="../index.php"><span class="material-symbols-outlined">home</span>Inicio</a>
-        <a href="cart-view.php"><span class="material-symbols-outlined">shopping_cart</span>Carrito</a>
+        <a href="cart-view.php"><span class="material-symbols-outlined">
+            <?php echo isset($_SESSION['added']) ? 'add_shopping_cart' : 'shopping_cart'; ?>
+        </span>Carrito</a>
     </div>
 
     <div class="right-nav">
         <?php
         if (!isset($_SESSION['user'])){
-            echo "<a href='../View/login.php'><span class='material-symbols-outlined'>login</span>Login</a>";
+            echo "<a href='login.php'><span class='material-symbols-outlined'>login</span>Login</a>";
         } else {
-            echo "<a href='../Controller/logout-controller.php'><span class='material-symbols-outlined'>logout</span>Logout</a>";
+            echo "<a href='Controller/logout-controller.php'><span class='material-symbols-outlined'>logout</span>".$user->getUsername()."</a>";
+            echo "<a href='Controller/logout-controller.php'><span class='material-symbols-outlined'>receipt</span>Pedidos</a>";
         }
         ?>
     </div>
 </header>
 
-<hr/>
 <h2>Libros</h2>
 
 <div class="list-container">
@@ -170,14 +178,15 @@ session_start();
         $books = $_SESSION['books'];
 
         foreach ($books as $book) {
-
-            // Mini portada genérica
-            $cover = "PORTADA";
+            // Ruta de la imagen según ISBN
+            $coverPath = "../img/{$book["ISBN"]}.jpg";
+            $coverImg = file_exists($coverPath)
+                    ? "<img src='{$coverPath}' alt='Portada de {$book["TITLE"]}'>"
+                    : "PORTADA";
 
             echo "
             <div class='book-item'>
-                
-                <div class='book-cover'>$cover</div>
+                <div class='book-cover'>{$coverImg}</div>
 
                 <div class='book-info'>
                     <span class='book-title'>{$book["TITLE"]}</span>

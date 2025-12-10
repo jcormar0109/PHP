@@ -5,16 +5,17 @@ namespace App\Model;
 const IVA = 1.21;
 class Book
 {
-    protected int $id;
-    protected string $isbn;
-    protected string $title;
-    protected string $author;
-    protected float $pvp;
-    protected float $iva;
-    protected float $stock;
-    protected int $quantity = 1;
+    private int $id;
+    private string $isbn;
+    private string $title;
+    private string $author;
+    private float $pvp;
+    private float $iva;
+    private float $stock;
+    private string $resume;
+    private int $quantity = 1;
 
-    public function __construct(int $id, string $isbn, string $title, string $author, float $pvp, float $stock)
+    public function __construct(int $id, string $isbn, string $title, string $author, float $pvp, string $resume, float $stock)
     {
         $this->id = $id;
         $this->isbn = $isbn;
@@ -23,6 +24,7 @@ class Book
         $this->pvp = $pvp;
         $this->iva = $pvp * IVA;
         $this->stock = $stock;
+        $this->resume = $resume;
         $this->quantity = 1;
     }
 
@@ -109,6 +111,16 @@ class Book
             $this->quantity -= 1;
         }
 
+    }
+
+    public function getResume(): string
+    {
+        return $this->resume;
+    }
+
+    public function setResume(string $resume): void
+    {
+        $this->resume = $resume;
     }
 
 

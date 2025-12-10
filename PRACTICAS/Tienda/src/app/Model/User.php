@@ -8,18 +8,18 @@ class User
     private string $username;
     private string $dni;
     private string $passwd;
-    private string $fisrtName;
+    private string $firstName;
     private string $secondName;
     private string $email;
     private string $address;
 
-    public function __construct(int $id, string $dni, string $username , string $passwd, string $fisrtName, string $secondName, string $email, string $address)
+    public function __construct(int $id, string $dni, string $username , string $passwd, string $firstName, string $secondName, string $email, string $address)
     {
         $this->id = $id;
         $this->dni = $dni;
         $this->username = $username;
         $this->passwd = md5($passwd);
-        $this->fisrtName = $fisrtName;
+        $this->firstName = $firstName;
         $this->secondName = $secondName;
         $this->email = $email;
         $this->address = $address;
@@ -45,14 +45,14 @@ class User
         $this->passwd = md5($passwd);
     }
 
-    public function getFisrtName(): string
+    public function getFirstName(): string
     {
-        return $this->fisrtName;
+        return $this->firstName;
     }
 
-    public function setFisrtName(string $fisrtName): void
+    public function setFirstName(string $firstName): void
     {
-        $this->fisrtName = $fisrtName;
+        $this->firstName = $firstName;
     }
 
     public function getSecondName(): string
